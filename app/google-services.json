@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "446610061674",
+    "firebase_url": "https://netology-kt1-tribune.firebaseio.com",
+    "project_id": "netology-kt1-tribune",
+    "storage_bucket": "netology-kt1-tribune.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:446610061674:android:c78e40400893848f9b0d13",
+        "android_client_info": {
+          "package_name": "ru.netology.saturn33.kt1.diploma"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "446610061674-bp656rksis1ll1lh8cmpd1dl1qvfi9af.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM2ZKJoCrxoZukbK5jqEM32ZkI9f9Ajqo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "446610061674-bp656rksis1ll1lh8cmpd1dl1qvfi9af.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
