@@ -3,4 +3,9 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="badge_promoter">#00cc00</color>
+    <color name="badge_hater">#cc0000</color>
+    <color name="promote">#00aa00</color>
+    <color name="demote">#aa0000</color>
+    <color name="normal">#555555</color>
 </resources>

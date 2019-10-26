@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">Tribune</string>
+    <string name="username">Имя пользователя</string>
+    <string name="password">Пароль</string>
+    <string name="password_confirmation">Подтверждение пароля</string>
+    <string name="register">Зарегистрироваться</string>
+    <string name="already_have_account">Уже есть аккаунт?</string>
+    <string name="title_registration">Регистрация</string>
+    <string name="title_reaction_list">Список реакций</string>
+    <string name="title_profile">Профиль</string>
+    <string name="title_crate_post">Создание идеи</string>
+    <string name="title_feed">Идеи</string>
+    <string name="title_auth">Авторизация</string>
+    <string name="dont_have_account">Ещё не зарегистрированы?</string>
+    <string name="login">Войти</string>
+    <string name="menu_exit">Выход</string>
+    <string name="menu_profile">Профиль</string>
+    <string name="author_avatar">Аватарка автора</string>
+    <string name="post_image">Изображение идеи</string>
+    <string name="post_link">Ссылка в идее</string>
+    <string name="see_ideas_of_this_author">Просмотреть идеи этого автора</string>
+    <string name="badge_promoter">promoter</string>
+    <string name="badge_hater">hater</string>
 </resources>

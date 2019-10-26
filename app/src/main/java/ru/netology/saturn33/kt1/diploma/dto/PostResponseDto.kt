@@ -4,6 +4,7 @@ data class PostResponseDto(
     val id: Long,
     val date: Long,
     val author: UserResponseDto,
+    val link: String?,
     var text: String,
     var promotes: Int = 0,
     var promotedByMe: Boolean = false,

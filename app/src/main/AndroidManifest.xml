@@ -21,12 +21,31 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ui.ReactionListActivity" />
-        <activity android:name=".ui.ProfileActivity" />
-        <activity android:name=".ui.PostActivity" />
-        <activity android:name=".ui.FeedActivity" />
-        <activity android:name=".ui.AuthActivity" />
-        <activity android:name=".ui.RegistrationActivity">
+        <activity
+            android:name=".ui.ReactionListActivity"
+            android:label="@string/title_reaction_list"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ProfileActivity"
+            android:label="@string/title_profile"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.PostActivity"
+            android:label="@string/title_crate_post"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.FeedActivity"
+            android:label="@string/title_feed"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.AuthActivity"
+            android:label="@string/title_auth"
+            android:screenOrientation="portrait"
+
+            />
+        <activity
+            android:name=".ui.RegistrationActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
