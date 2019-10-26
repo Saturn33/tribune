@@ -21,4 +21,5 @@
     <string name="see_ideas_of_this_author">Просмотреть идеи этого автора</string>
     <string name="badge_promoter">promoter</string>
     <string name="badge_hater">hater</string>
+    <string name="reaction">Реакция</string>
 </resources>

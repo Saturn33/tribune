@@ -4,7 +4,11 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.activity_reaction_list.*
 import ru.netology.saturn33.kt1.diploma.R
+import ru.netology.saturn33.kt1.diploma.adapter.ReactionAdapter
+import ru.netology.saturn33.kt1.diploma.helpers.Stub
 
 class ReactionListActivity : AppCompatActivity() {
 
@@ -27,13 +31,17 @@ class ReactionListActivity : AppCompatActivity() {
         super.onStart()
         val postId = intent.getLongExtra("postId", 0L)
         Toast.makeText(this, "Reactions of post #$postId", Toast.LENGTH_LONG).show()
-    }
 
-/*
-    setResult(RESULT_OK, Intent().apply {
-        putExtra("userId", 3L);
-    });
-    finish();
-*/
+        with(container) {
+            layoutManager = LinearLayoutManager(this@ReactionListActivity)
+            val list = Stub.getReactions(50)
+            adapter = ReactionAdapter(list)
+        }
+
+        swipeContainer.setOnRefreshListener {
+            swipeContainer.isRefreshing = false
+        }
+
+    }
 
 }
