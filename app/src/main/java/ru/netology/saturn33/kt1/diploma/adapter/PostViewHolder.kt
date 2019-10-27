@@ -6,16 +6,22 @@ import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.footer.view.*
 import kotlinx.android.synthetic.main.post.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import ru.netology.saturn33.kt1.diploma.R
 import ru.netology.saturn33.kt1.diploma.REACTIONS_REQUEST_CODE
 import ru.netology.saturn33.kt1.diploma.dto.PostResponseDto
 import ru.netology.saturn33.kt1.diploma.model.UserBadge
+import ru.netology.saturn33.kt1.diploma.repositories.Repository
 import ru.netology.saturn33.kt1.diploma.ui.ReactionListActivity
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -47,10 +53,21 @@ class PostViewHolder(val adapter: PostAdapter, itemView: View) : RecyclerView.Vi
                     val currentPosition = adapterPosition
                     val item = adapter.list[currentPosition]
                     if (!item.promotedByMe && !item.demotedByMe) {
-                        item.promotedByMe = true
-                        item.promotes++
-
-                        adapter.notifyItemChanged(currentPosition)
+                        GlobalScope.launch(Dispatchers.Main) {
+                            try {
+                                val response = Repository.promote(item.id)
+                                if (response.isSuccessful) {
+                                    item.updatePost(response.body()!!)
+                                }
+                            } catch (e: IOException) {
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.reaction_post_error),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            adapter.notifyItemChanged(currentPosition)
+                        }
                     }
                 }
             }
@@ -60,10 +77,21 @@ class PostViewHolder(val adapter: PostAdapter, itemView: View) : RecyclerView.Vi
                     val currentPosition = adapterPosition
                     val item = adapter.list[currentPosition]
                     if (!item.promotedByMe && !item.demotedByMe) {
-                        item.demotedByMe = true
-                        item.demotes++
-
-                        adapter.notifyItemChanged(currentPosition)
+                        GlobalScope.launch(Dispatchers.Main) {
+                            try {
+                                val response = Repository.demote(item.id)
+                                if (response.isSuccessful) {
+                                    item.updatePost(response.body()!!)
+                                }
+                            } catch (e: IOException) {
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.reaction_post_error),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            adapter.notifyItemChanged(currentPosition)
+                        }
                     }
                 }
             }

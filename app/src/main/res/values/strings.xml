@@ -29,4 +29,11 @@
     <string name="progress_loading">Обработка…</string>
     <string name="auth_success">Аутентификация пройдена успешно</string>
     <string name="unknown_auth_error">Неизвестная ошибка аутентификации</string>
+    <string name="googleplay_services_unavailable">Сервисы Google недоступны</string>
+    <string name="feed_load_error">Ошибка загрузки фида</string>
+    <string name="feed_update_error">Ошибка обновления фида</string>
+    <string name="menu_clear_user_filter">Убрать фильтр по пользователю</string>
+    <string name="reaction_post_error">Ошибка отправки реакции</string>
+    <string name="reactions_load_error">Ошибка загрузки реакций</string>
+    <string name="reactions_update_error">Ошибка обновления реакций</string>
 </resources>

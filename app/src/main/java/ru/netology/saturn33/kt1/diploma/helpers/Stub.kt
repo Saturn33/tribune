@@ -91,7 +91,6 @@ object Stub {
         for (i in 1L..count) {
             reactions.add(
                 ReactionResponseDto(
-                    i,
                     Date().time - 86400 * 1000 * i,
                     users.get(Random.nextInt(users.size)),
                     if (Random.nextBoolean()) ReactionType.PROMOTE else ReactionType.DEMOTE

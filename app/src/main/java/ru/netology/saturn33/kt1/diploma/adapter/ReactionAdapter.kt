@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.netology.saturn33.kt1.diploma.R
 import ru.netology.saturn33.kt1.diploma.dto.ReactionResponseDto
 
-class ReactionAdapter(val list: List<ReactionResponseDto>) :
+class ReactionAdapter(val list: MutableList<ReactionResponseDto>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ReactionViewHolder(

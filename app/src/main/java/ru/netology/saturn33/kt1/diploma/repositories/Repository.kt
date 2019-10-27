@@ -10,6 +10,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.netology.saturn33.kt1.diploma.API_BASE_URL
+import ru.netology.saturn33.kt1.diploma.PAGE_SIZE
 import ru.netology.saturn33.kt1.diploma.client.InjectAuthTokenInterceptor
 import ru.netology.saturn33.kt1.diploma.client.RetrofitAPI
 import ru.netology.saturn33.kt1.diploma.dto.*
@@ -50,11 +51,21 @@ object Repository {
         RegistrationRequestDto(login, password)
     )
 
+    suspend fun getRecentPosts(userId: Long = 0) = API.getRecentPosts(userId, PAGE_SIZE)
+
+    suspend fun getPostsBefore(userId: Long, id: Long) = API.getPostsBefore(userId, id, PAGE_SIZE)
+
     suspend fun getProfile() = API.getProfile()
 
     suspend fun saveProfile(avatar: AttachmentDto?) = API.saveProfile(
         ProfileRequestDto(avatar)
     )
+
+    suspend fun promote(id: Long) = API.promote(id)
+
+    suspend fun demote(id: Long) = API.demote(id)
+
+    suspend fun getReactions(postId: Long) = API.getReactions(postId)
 
     suspend fun registerPushToken(token: String) = API.registerPushToken(PushTokenRequestDto(token))
 

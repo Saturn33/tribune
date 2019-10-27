@@ -25,4 +25,19 @@ interface RetrofitAPI {
     @POST("token")
     suspend fun registerPushToken(@Body pushToken: PushTokenRequestDto): Response<Void>
 
+    @GET("posts/recent/{userId}/{count}")
+    suspend fun getRecentPosts(@Path("userId") userId: Long, @Path("count") pageSize: Long): Response<MutableList<PostResponseDto>>
+
+    @GET("posts/before/{userId}/{id}/{count}")
+    suspend fun getPostsBefore(@Path("userId") userId: Long, @Path("id") postId: Long, @Path("count") count: Long): Response<MutableList<PostResponseDto>>
+
+    @POST("posts/{id}/promote")
+    suspend fun promote(@Path("id") id: Long): Response<PostResponseDto>
+
+    @POST("posts/{id}/demote")
+    suspend fun demote(@Path("id") id: Long): Response<PostResponseDto>
+
+    @GET("posts/reactions/{id}")
+    suspend fun getReactions(@Path("id") postId: Long): Response<MutableList<ReactionResponseDto>>
+
 }

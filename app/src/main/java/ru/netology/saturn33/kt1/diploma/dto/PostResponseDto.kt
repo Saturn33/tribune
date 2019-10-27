@@ -11,4 +11,11 @@ data class PostResponseDto(
     var demotes: Int = 0,
     var demotedByMe: Boolean = false,
     val attachment: AttachmentDto
-)
+) {
+    fun updatePost(body: PostResponseDto) {
+        promotes = body.promotes
+        promotedByMe = body.promotedByMe
+        demotes = body.demotes
+        demotedByMe = body.demotedByMe
+    }
+}
