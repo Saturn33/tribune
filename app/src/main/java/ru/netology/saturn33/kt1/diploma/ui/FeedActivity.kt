@@ -21,8 +21,13 @@ class FeedActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feed)
 
-        fab.setOnClickListener {
-            startActivity(Intent(this, PostActivity::class.java))
+        if (SPref.isReadOnly(this)) {
+            fab.hide()
+        } else {
+            fab.show()
+            fab.setOnClickListener {
+                startActivity(Intent(this, PostActivity::class.java))
+            }
         }
     }
 

@@ -22,4 +22,11 @@
     <string name="badge_promoter">promoter</string>
     <string name="badge_hater">hater</string>
     <string name="reaction">Реакция</string>
+    <string name="passwords_do_not_match">Пароли не совпадают</string>
+    <string name="communication_error">Неизвестная ошибка связи</string>
+    <string name="unknown_registration_error">Неизвестная ошибка регистрации</string>
+    <string name="registration_success">Регистрация прошла успешно</string>
+    <string name="progress_loading">Обработка…</string>
+    <string name="auth_success">Аутентификация пройдена успешно</string>
+    <string name="unknown_auth_error">Неизвестная ошибка аутентификации</string>
 </resources>
