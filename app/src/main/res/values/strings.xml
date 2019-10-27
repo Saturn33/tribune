@@ -36,4 +36,11 @@
     <string name="reaction_post_error">Ошибка отправки реакции</string>
     <string name="reactions_load_error">Ошибка загрузки реакций</string>
     <string name="reactions_update_error">Ошибка обновления реакций</string>
+    <string name="read_only">READ ONLY</string>
+    <string name="profile_save">Сохранить</string>
+    <string name="profile_load_error">Ошибка загрузки профиля</string>
+    <string name="profile_saved">Профиль сохранён</string>
+    <string name="profile_save_error">Ошибка сохранения профиля</string>
+    <string name="profile_avatar_upload_error">Ошибка загрузки изображения</string>
+    <string name="remove_avatar">Убрать изображение</string>
 </resources>
