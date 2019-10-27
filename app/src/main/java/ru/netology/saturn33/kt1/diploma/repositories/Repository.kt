@@ -69,6 +69,8 @@ object Repository {
 
     suspend fun registerPushToken(token: String) = API.registerPushToken(PushTokenRequestDto(token))
 
+    suspend fun unregisterPushToken(id: Long) = API.unregisterPushToken(id)
+
     suspend fun upload(bitmap: Bitmap): Response<AttachmentDto> {
         val bos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos)
