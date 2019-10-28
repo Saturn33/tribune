@@ -198,6 +198,13 @@ class PostViewHolder(val adapter: PostAdapter, itemView: View) : RecyclerView.Vi
             } else {
                 badge.visibility = View.GONE
             }
+
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                val currentPosition = adapterPosition
+                if (currentPosition == adapter.list.lastIndex) {
+                    (context as FeedActivity).getOlderPosts(if (adapter.list.isEmpty()) 0 else adapter.list.last().id)
+                }
+            }
         }
     }
 

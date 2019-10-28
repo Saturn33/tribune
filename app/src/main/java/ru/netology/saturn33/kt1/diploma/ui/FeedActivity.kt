@@ -17,6 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import ru.netology.saturn33.kt1.diploma.PAGE_SIZE
 import ru.netology.saturn33.kt1.diploma.R
 import ru.netology.saturn33.kt1.diploma.REACTIONS_REQUEST_CODE
 import ru.netology.saturn33.kt1.diploma.adapter.PostAdapter
@@ -30,6 +31,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private lateinit var dialog: AlertDialog
     private var filterByUser: Long = 0
     private var menuLink: Menu? = null
+    private var loadMore = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,7 +130,45 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         job = getNewPosts()
     }
 
+    internal fun getOlderPosts(postId: Long) {
+        if (!loadMore) return
+        job = launch {
+            dialog.show()
+            try {
+                val response = Repository.getPostsBefore(filterByUser, postId)
+
+                if (response.isSuccessful) {
+                    val newItems = response.body() ?: mutableListOf()
+                    if (newItems.size > 0) {
+                        val oldLastIndex = (container.adapter as PostAdapter).list.lastIndex
+                        (container.adapter as PostAdapter).list.addAll(newItems)
+                        (container.adapter as PostAdapter).notifyItemRangeInserted(oldLastIndex + 1, newItems.size)
+                    }
+                    if (newItems.size < PAGE_SIZE) {
+                        loadMore = false
+                        Toast.makeText(this@FeedActivity, getString(R.string.no_more_posts), Toast.LENGTH_SHORT).show()
+                    }
+
+                } else {
+                    Toast.makeText(
+                        this@FeedActivity,
+                        getString(R.string.feed_update_error),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: IOException) {
+                Toast.makeText(
+                    this@FeedActivity,
+                    getString(R.string.feed_load_error),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            dialog.dismiss()
+        }
+    }
+
     private fun getNewPosts(): Job {
+        loadMore = true
         getProfileInfo()
         return launch {
             dialog.show()

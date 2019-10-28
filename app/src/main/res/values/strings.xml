@@ -49,4 +49,5 @@
     <string name="post_added">Идея добавлена</string>
     <string name="post_add_error">Ошибка добавления идеи</string>
     <string name="idea_link">Ссылка (необязательно)</string>
+    <string name="no_more_posts">Больше нет постов</string>
 </resources>
