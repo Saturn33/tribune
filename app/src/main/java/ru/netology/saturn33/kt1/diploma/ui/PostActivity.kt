@@ -16,6 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import ru.netology.saturn33.kt1.diploma.R
 import ru.netology.saturn33.kt1.diploma.dto.AttachmentDto
 import ru.netology.saturn33.kt1.diploma.helpers.Validator
@@ -103,11 +104,20 @@ class PostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                         ).show()
                         finish()
                     } else {
-                        Toast.makeText(
-                            this@PostActivity,
-                            getString(R.string.post_add_error),
-                            Toast.LENGTH_LONG
-                        ).show()
+                        try {
+                            val json = JSONObject(result.errorBody()?.string() ?: "")
+                            Toast.makeText(
+                                this@PostActivity,
+                                getString(R.string.post_add_error)+": "+json.get("error").toString(),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } catch (e: Exception) {
+                            Toast.makeText(
+                                this@PostActivity,
+                                getString(R.string.post_add_error),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
                 } catch (e: IOException) {
                     Toast.makeText(

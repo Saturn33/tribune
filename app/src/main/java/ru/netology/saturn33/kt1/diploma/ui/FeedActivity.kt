@@ -35,19 +35,15 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feed)
 
-        if (SPref.isReadOnly(this)) {
-            fab.hide()
-        } else {
-            fab.show()
-            fab.setOnClickListener {
-                startActivity(Intent(this, PostActivity::class.java))
-            }
-        }
-
         requestToken()
         dialog = AlertDialog.Builder(this@FeedActivity)
             .setCancelable(false)
             .setView(R.layout.progressbar).create()
+
+        fab.setOnClickListener {
+            startActivity(Intent(this, PostActivity::class.java))
+        }
+        getProfileInfo()
 
         job = launch {
             dialog.show()
@@ -72,6 +68,28 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
         swipeContainer.setOnRefreshListener {
             job = getNewPosts()
+        }
+    }
+
+    private fun getProfileInfo() {
+        launch {
+            try {
+                val result = Repository.getProfile()
+                if (result.isSuccessful) {
+                    SPref.setReadOnly(this@FeedActivity, result.body()?.isReadOnly ?: false)
+                    if (SPref.isReadOnly(this@FeedActivity)) {
+                        fab.hide()
+                    } else {
+                        fab.show()
+                    }
+                }
+            } catch (e: IOException) {
+                Toast.makeText(
+                    this@FeedActivity,
+                    getString(R.string.profile_load_error),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
@@ -111,13 +129,14 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     }
 
     private fun getNewPosts(): Job {
+        getProfileInfo()
         return launch {
             dialog.show()
             try {
                 val response = Repository.getRecentPosts(filterByUser)
 
                 if (response.isSuccessful) {
-                    val newItems = response.body()!!
+                    val newItems = response.body() ?: mutableListOf()
                     (container.adapter as PostAdapter).list.clear()
                     (container.adapter as PostAdapter).list.addAll(0, newItems)
                     (container.adapter as PostAdapter).notifyDataSetChanged()
