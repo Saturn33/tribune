@@ -10,10 +10,10 @@
     <ImageView
         android:id="@+id/avatarImg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.6"
         android:adjustViewBounds="true"
         android:contentDescription="@string/author_avatar"
-        android:maxHeight="300dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_person"
         app:layout_constraintEnd_toEndOf="parent"
