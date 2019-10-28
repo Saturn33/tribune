@@ -103,6 +103,13 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
     }
 
+    internal fun filterByUser(userId: Long) {
+        menuLink?.findItem(R.id.action_clear_user_filter)
+            ?.setIcon(if (userId == 0L) R.drawable.filter_by_user else R.drawable.filter_by_user_active)
+        filterByUser = userId
+        job = getNewPosts()
+    }
+
     private fun getNewPosts(): Job {
         return launch {
             dialog.show()
@@ -154,9 +161,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 true
             }
             R.id.action_clear_user_filter -> {
-                filterByUser = 0
-                item.setIcon(R.drawable.filter_by_user)
-                job = getNewPosts()
+                filterByUser(0)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -171,10 +176,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 if (resultCode == Activity.RESULT_OK) {
                     val userId = data?.getLongExtra("userId", 0L) ?: 0
 //                    Toast.makeText(this, "Returned userId $userId", Toast.LENGTH_LONG).show()
-                    filterByUser = userId
-                    menuLink?.findItem(R.id.action_clear_user_filter)
-                        ?.setIcon(R.drawable.filter_by_user_active)
-                    job = getNewPosts()
+                    filterByUser(userId)
                 }
             }
         }

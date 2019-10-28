@@ -20,6 +20,7 @@ import ru.netology.saturn33.kt1.diploma.REACTIONS_REQUEST_CODE
 import ru.netology.saturn33.kt1.diploma.dto.PostResponseDto
 import ru.netology.saturn33.kt1.diploma.model.UserBadge
 import ru.netology.saturn33.kt1.diploma.repositories.Repository
+import ru.netology.saturn33.kt1.diploma.ui.FeedActivity
 import ru.netology.saturn33.kt1.diploma.ui.ReactionListActivity
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -123,6 +124,14 @@ class PostViewHolder(val adapter: PostAdapter, itemView: View) : RecyclerView.Vi
                                 data = Uri.parse(link)
                             })
                     }
+                }
+            }
+
+            author_avatar.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    val currentPosition = adapterPosition
+                    val item = adapter.list[currentPosition]
+                    (context as FeedActivity).filterByUser(item.author.id)
                 }
             }
         }
