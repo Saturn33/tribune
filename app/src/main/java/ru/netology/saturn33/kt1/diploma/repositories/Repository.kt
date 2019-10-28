@@ -61,6 +61,10 @@ object Repository {
         ProfileRequestDto(avatar)
     )
 
+    suspend fun addPost(text: String, link: String?, image: AttachmentDto) = API.addPost(
+        PostRequestDto(text, link, image)
+    )
+
     suspend fun promote(id: Long) = API.promote(id)
 
     suspend fun demote(id: Long) = API.demote(id)

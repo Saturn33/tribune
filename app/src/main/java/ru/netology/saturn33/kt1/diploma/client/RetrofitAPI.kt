@@ -28,6 +28,9 @@ interface RetrofitAPI {
     @DELETE("token/{id}")
     suspend fun unregisterPushToken(@Path("id") id: Long): Response<Void>
 
+    @POST("posts")
+    suspend fun addPost(@Body createPostRequest: PostRequestDto): Response<Void>
+
     @GET("posts/recent/{userId}/{count}")
     suspend fun getRecentPosts(@Path("userId") userId: Long, @Path("count") pageSize: Long): Response<MutableList<PostResponseDto>>
 

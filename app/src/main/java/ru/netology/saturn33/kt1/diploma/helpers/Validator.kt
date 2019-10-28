@@ -21,4 +21,17 @@ object Validator {
 
         return true to ""
     }
+
+    fun isPostTextValid(text: String): Pair<Boolean, String> {
+        val limit = 100
+        if (text.isEmpty()) return false to "Текст идеи должен быть заполнен"
+        if (text.length > limit) return false to "Текст идеи должен быть менее $limit символов"
+        return true to ""
+    }
+
+    fun isPostLinkValid(link: String?): Pair<Boolean, String> {
+        if (link == null) return true to ""
+        if (!Regex("^https?://.+").matches(link)) return false to "Ссылка должна начинаться с http(s)://"
+        return true to ""
+    }
 }
