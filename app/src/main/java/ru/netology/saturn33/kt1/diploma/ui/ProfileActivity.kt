@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -35,12 +36,24 @@ class ProfileActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.profile_menu, menu)
+
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (item.itemId == android.R.id.home) {
-            finish()
-            true
-        } else {
-            return super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            R.id.action_done -> {
+                doSaveProfile()
+                true
+            }
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -107,35 +120,35 @@ class ProfileActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             attachmentModel = null
             redrawImage()
         }
+    }
 
-        profileSave.setOnClickListener {
-            job = launch {
-                dialog.show()
-                try {
-                    val result = Repository.saveProfile(attachmentModel)
-                    if (result.isSuccessful) {
-                        Toast.makeText(
-                            this@ProfileActivity,
-                            getString(R.string.profile_saved),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        finish()
-                    } else {
-                        Toast.makeText(
-                            this@ProfileActivity,
-                            getString(R.string.profile_save_error),
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                } catch (e: IOException) {
+    private fun doSaveProfile() {
+        job = launch {
+            dialog.show()
+            try {
+                val result = Repository.saveProfile(attachmentModel)
+                if (result.isSuccessful) {
+                    Toast.makeText(
+                        this@ProfileActivity,
+                        getString(R.string.profile_saved),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    finish()
+                } else {
                     Toast.makeText(
                         this@ProfileActivity,
                         getString(R.string.profile_save_error),
                         Toast.LENGTH_LONG
                     ).show()
-                } finally {
-                    dialog.dismiss()
                 }
+            } catch (e: IOException) {
+                Toast.makeText(
+                    this@ProfileActivity,
+                    getString(R.string.profile_save_error),
+                    Toast.LENGTH_LONG
+                ).show()
+            } finally {
+                dialog.dismiss()
             }
         }
     }
