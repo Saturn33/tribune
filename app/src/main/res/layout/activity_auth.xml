@@ -16,12 +16,10 @@
         android:gravity="center_vertical"
         android:text="@string/app_name"
         android:textSize="@dimen/text_title"
-        app:layout_constraintBottom_toTopOf="@id/wr_username"
-        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintHeight_percent="0.4"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
 
         />
 
@@ -30,7 +28,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/wr_password"
-        app:layout_constraintTop_toBottomOf="@id/logo">
+        app:layout_constraintTop_toBottomOf="@id/logo"
+        app:layout_constraintVertical_chainStyle="packed">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/username"

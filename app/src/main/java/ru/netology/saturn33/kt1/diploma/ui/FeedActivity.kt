@@ -28,6 +28,7 @@ import java.io.IOException
 
 class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private var job: Job? = null
+    private var profileJob: Job? = null
     private lateinit var dialog: AlertDialog
     private var filterByUser: Long = 0
     private var menuLink: Menu? = null
@@ -74,7 +75,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     }
 
     private fun getProfileInfo() {
-        launch {
+        profileJob = launch {
             try {
                 val result = Repository.getProfile()
                 if (result.isSuccessful) {
@@ -142,11 +143,18 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     if (newItems.size > 0) {
                         val oldLastIndex = (container.adapter as PostAdapter).list.lastIndex
                         (container.adapter as PostAdapter).list.addAll(newItems)
-                        (container.adapter as PostAdapter).notifyItemRangeInserted(oldLastIndex + 1, newItems.size)
+                        (container.adapter as PostAdapter).notifyItemRangeInserted(
+                            oldLastIndex + 1,
+                            newItems.size
+                        )
                     }
                     if (newItems.size < PAGE_SIZE) {
                         loadMore = false
-                        Toast.makeText(this@FeedActivity, getString(R.string.no_more_posts), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@FeedActivity,
+                            getString(R.string.no_more_posts),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
 
                 } else {
@@ -244,6 +252,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     override fun onStop() {
         super.onStop()
         job?.cancel()
+        profileJob?.cancel()
         dialog.dismiss()
     }
 }
