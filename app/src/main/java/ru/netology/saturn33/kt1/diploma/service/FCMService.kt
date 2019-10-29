@@ -13,6 +13,7 @@ class FCMService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         println(message)
         val recipientId = message.data["recipientId"]?.toLong() ?: 0
+        val postId = message.data["postId"]?.toLong() ?: 0L
         val title = message.data["title"] ?: ""
         val text = message.data["text"] ?: ""
 
@@ -20,7 +21,7 @@ class FCMService : FirebaseMessagingService() {
 
         val jwt = JWT(token)
         if (jwt.getClaim("id").asLong() == recipientId) {
-            Notify.simpleNotification(applicationContext, title, text)
+            Notify.simpleNotification(applicationContext, postId, title, text)
         } else {
             unregisterPushToken(recipientId)
         }

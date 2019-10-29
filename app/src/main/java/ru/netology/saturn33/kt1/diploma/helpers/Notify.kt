@@ -2,11 +2,15 @@ package ru.netology.saturn33.kt1.diploma.helpers
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import ru.netology.saturn33.kt1.diploma.R
+import ru.netology.saturn33.kt1.diploma.ui.FeedActivity
+import ru.netology.saturn33.kt1.diploma.ui.ReactionListActivity
 
 private const val SIMPLE_NOTIFY_ID = 0
 private const val SIMPLE_NOTIFY_CHANNEL_ID = "simple_channel"
@@ -36,15 +40,27 @@ object Notify {
 
     fun simpleNotification(
         context: Context,
+        postId: Long,
         title: String,
         text: String,
         nId: Int = SIMPLE_NOTIFY_ID
     ) {
+        val intent = if (postId > 0) {
+            Intent(context, ReactionListActivity::class.java).apply {
+                putExtra("postId", postId)
+            }
+        } else {
+            Intent(context, FeedActivity::class.java)
+        }
+        val pendingIntent = PendingIntent.getActivity(context,0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
         createNotificationChannelIfNotCreated(context)
         val builder = NotificationCompat.Builder(context, SIMPLE_NOTIFY_CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher_round).setContentTitle(title)
             .setContentText(text)
             .setStyle(NotificationCompat.BigTextStyle())
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             builder.priority = NotificationManager.IMPORTANCE_HIGH
