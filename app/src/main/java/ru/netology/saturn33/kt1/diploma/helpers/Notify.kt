@@ -48,6 +48,7 @@ object Notify {
         val intent = if (postId > 0) {
             Intent(context, ReactionListActivity::class.java).apply {
                 putExtra("postId", postId)
+                putExtra("createNewFeed", true)
             }
         } else {
             Intent(context, FeedActivity::class.java)

@@ -1,5 +1,6 @@
 package ru.netology.saturn33.kt1.diploma.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
@@ -29,6 +30,8 @@ class ReactionListActivity : AppCompatActivity(), CoroutineScope by MainScope() 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == android.R.id.home) {
+            if (intent.getBooleanExtra("createNewFeed", false))
+                startActivity(Intent(this, FeedActivity::class.java))
             finish()
             true
         } else {

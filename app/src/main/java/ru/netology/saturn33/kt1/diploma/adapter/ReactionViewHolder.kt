@@ -12,6 +12,7 @@ import ru.netology.saturn33.kt1.diploma.R
 import ru.netology.saturn33.kt1.diploma.dto.ReactionResponseDto
 import ru.netology.saturn33.kt1.diploma.model.ReactionType
 import ru.netology.saturn33.kt1.diploma.model.UserBadge
+import ru.netology.saturn33.kt1.diploma.ui.FeedActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -24,9 +25,14 @@ class ReactionViewHolder(val adapter: ReactionAdapter, itemView: View) :
                     val currentPosition = adapterPosition
                     val item = adapter.list[currentPosition]
                     with(this.context as Activity) {
-                        setResult(RESULT_OK, Intent().apply {
-                            putExtra("userId", item.user.id)
-                        })
+                        if (intent.getBooleanExtra("createNewFeed", false))
+                            startActivity(Intent(this, FeedActivity::class.java).apply {
+                                putExtra("userId", item.user.id)
+                            })
+                        else
+                            setResult(RESULT_OK, Intent().apply {
+                                putExtra("userId", item.user.id)
+                            })
                         finish()
                     }
                 }
@@ -76,13 +82,6 @@ class ReactionViewHolder(val adapter: ReactionAdapter, itemView: View) :
 
     private fun removeAvatar(authorAvatar: ImageView) {
         authorAvatar.setImageResource(R.drawable.ic_person)
-    }
-
-    private fun loadImage(photoImg: ImageView, url: String) {
-        Glide.with(photoImg.context)
-            .load(url)
-            .fitCenter()
-            .into(photoImg)
     }
 
     private fun loadAvatar(photoImg: ImageView, url: String) {

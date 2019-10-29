@@ -66,6 +66,11 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+
+            val userId = intent.getLongExtra("userId", 0L)
+            if (userId > 0) {
+                filterByUser(userId)
+            }
             dialog.dismiss()
         }
 
