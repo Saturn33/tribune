@@ -16,17 +16,20 @@ class FCMService : FirebaseMessagingService() {
         val title = message.data["title"] ?: ""
         val text = message.data["text"] ?: ""
 
-        val token = SPref.getToken(baseContext) ?: return
+        val token = SPref.getToken(applicationContext) ?: return unregisterPushToken(recipientId)
 
         val jwt = JWT(token)
         if (jwt.getClaim("id").asLong() == recipientId) {
-            Notify.simpleNotification(baseContext, title, text)
+            Notify.simpleNotification(applicationContext, title, text)
         } else {
-            kotlinx.coroutines.CoroutineScope(Dispatchers.Main).launch {
-                Repository.unregisterPushToken(recipientId)
-            }
+            unregisterPushToken(recipientId)
         }
+    }
 
+    private fun unregisterPushToken(userId: Long) {
+        kotlinx.coroutines.CoroutineScope(Dispatchers.IO).launch {
+            Repository.unregisterPushToken(userId)
+        }
     }
 
     override fun onNewToken(pushToken: String) {
