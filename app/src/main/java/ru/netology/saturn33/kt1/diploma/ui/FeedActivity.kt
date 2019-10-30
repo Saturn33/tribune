@@ -2,13 +2,17 @@ package ru.netology.saturn33.kt1.diploma.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.iid.FirebaseInstanceId
@@ -20,6 +24,7 @@ import kotlinx.coroutines.launch
 import ru.netology.saturn33.kt1.diploma.PAGE_SIZE
 import ru.netology.saturn33.kt1.diploma.R
 import ru.netology.saturn33.kt1.diploma.REACTIONS_REQUEST_CODE
+import ru.netology.saturn33.kt1.diploma.REQUEST_ADD_POST
 import ru.netology.saturn33.kt1.diploma.adapter.PostAdapter
 import ru.netology.saturn33.kt1.diploma.dto.PostResponseDto
 import ru.netology.saturn33.kt1.diploma.helpers.SPref
@@ -44,7 +49,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             .setView(R.layout.progressbar).create()
 
         fab.setOnClickListener {
-            startActivity(Intent(this, PostActivity::class.java))
+            startActivityForResult(Intent(this, PostActivity::class.java), REQUEST_ADD_POST)
         }
         getProfileInfo()
 
@@ -69,7 +74,11 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
             val userId = intent.getLongExtra("userId", 0L)
             if (userId > 0) {
-                filterByUser(userId)
+                filterByUser(
+                    userId,
+                    intent.getStringExtra("userName") ?: "",
+                    intent.getStringExtra("userAvatar")
+                )
             }
             dialog.dismiss()
         }
@@ -129,9 +138,34 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
     }
 
-    internal fun filterByUser(userId: Long) {
-        menuLink?.findItem(R.id.action_clear_user_filter)
-            ?.setIcon(if (userId == 0L) R.drawable.filter_by_user else R.drawable.filter_by_user_active)
+    internal fun filterByUser(userId: Long, userName: String, userAvatar: String?) {
+        val menuItem = menuLink?.findItem(R.id.action_clear_user_filter)
+        if (userId == 0L) {
+            menuLink?.findItem(R.id.action_clear_user_filter)?.setIcon(R.drawable.filter_by_user)
+            title = getString(R.string.title_feed)
+
+        } else {
+            if (userAvatar != null && menuItem != null) {
+                Glide.with(this)
+                    .load(userAvatar)
+                    .centerInside()
+                    .into(object : CustomTarget<Drawable>() {
+                        override fun onLoadCleared(placeholder: Drawable?) {
+                        }
+
+                        override fun onResourceReady(
+                            resource: Drawable,
+                            transition: com.bumptech.glide.request.transition.Transition<in Drawable>?
+                        ) {
+                            menuItem.setIcon(resource)
+                        }
+
+                    })
+            } else {
+                menuLink?.findItem(R.id.action_clear_user_filter)?.setIcon(R.drawable.ic_person)
+            }
+            title = getString(R.string.title_feed) + " $userName"
+        }
         filterByUser = userId
         job = getNewPosts()
     }
@@ -139,7 +173,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     internal fun getOlderPosts(postId: Long) {
         if (!loadMore) return
         job = launch {
-            dialog.show()
+            loadMoreImg.visibility = View.VISIBLE
             try {
                 val response = Repository.getPostsBefore(filterByUser, postId)
 
@@ -176,7 +210,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-            dialog.dismiss()
+            loadMoreImg.visibility = View.GONE
         }
     }
 
@@ -233,7 +267,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 true
             }
             R.id.action_clear_user_filter -> {
-                filterByUser(0)
+                filterByUser(0, "", null)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -247,8 +281,18 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             REACTIONS_REQUEST_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val userId = data?.getLongExtra("userId", 0L) ?: 0
-//                    Toast.makeText(this, "Returned userId $userId", Toast.LENGTH_LONG).show()
-                    filterByUser(userId)
+                    filterByUser(
+                        userId,
+                        data?.getStringExtra("userName") ?: "",
+                        data?.getStringExtra("userAvatar")
+                    )
+                }
+            }
+            REQUEST_ADD_POST -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val needRefresh = data?.getBooleanExtra("needRefresh", false) ?: false
+                    if (needRefresh)
+                        filterByUser(0, "", null)
                 }
             }
         }

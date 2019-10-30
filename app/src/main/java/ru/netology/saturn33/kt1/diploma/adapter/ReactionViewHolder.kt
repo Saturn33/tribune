@@ -32,6 +32,8 @@ class ReactionViewHolder(val adapter: ReactionAdapter, itemView: View) :
                         else
                             setResult(RESULT_OK, Intent().apply {
                                 putExtra("userId", item.user.id)
+                                putExtra("userName", item.user.username)
+                                putExtra("userAvatar", item.user.avatar?.url)
                             })
                         finish()
                     }

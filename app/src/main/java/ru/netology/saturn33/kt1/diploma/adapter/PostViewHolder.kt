@@ -131,7 +131,14 @@ class PostViewHolder(val adapter: PostAdapter, itemView: View) : RecyclerView.Vi
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     val currentPosition = adapterPosition
                     val item = adapter.list[currentPosition]
-                    (context as FeedActivity).filterByUser(item.author.id)
+                    (context as FeedActivity).filterByUser(item.author.id, item.author.username, item.author.avatar?.url)
+                }
+            }
+            username.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    val currentPosition = adapterPosition
+                    val item = adapter.list[currentPosition]
+                    (context as FeedActivity).filterByUser(item.author.id, item.author.username, item.author.avatar?.url)
                 }
             }
         }

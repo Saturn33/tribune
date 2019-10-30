@@ -18,13 +18,13 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import ru.netology.saturn33.kt1.diploma.R
+import ru.netology.saturn33.kt1.diploma.REQUEST_IMAGE_CAPTURE
 import ru.netology.saturn33.kt1.diploma.dto.AttachmentDto
 import ru.netology.saturn33.kt1.diploma.helpers.Validator
 import ru.netology.saturn33.kt1.diploma.repositories.Repository
 import java.io.IOException
 
 class PostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
-    private val REQUEST_IMAGE_CAPTURE = 2
     private var attachmentModel: AttachmentDto? = null
     private var job: Job? = null
     private lateinit var dialog: AlertDialog
@@ -102,13 +102,16 @@ class PostActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                             getString(R.string.post_added),
                             Toast.LENGTH_SHORT
                         ).show()
+                        setResult(Activity.RESULT_OK, Intent().apply {
+                            putExtra("needRefresh", true)
+                        })
                         finish()
                     } else {
                         try {
                             val json = JSONObject(result.errorBody()?.string() ?: "")
                             Toast.makeText(
                                 this@PostActivity,
-                                getString(R.string.post_add_error)+": "+json.get("error").toString(),
+                                getString(R.string.post_add_error) + ": " + json.get("error").toString(),
                                 Toast.LENGTH_LONG
                             ).show()
                         } catch (e: Exception) {

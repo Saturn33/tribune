@@ -8,3 +8,6 @@ const val API_BASE_URL = "https://netology-kt1-diploma.herokuapp.com/api/v1/"
 const val AUTH_TOKEN_HEADER = "Authorization"
 const val PAGE_SIZE = 4L
 const val REACTIONS_REQUEST_CODE = 1
+const val REQUEST_IMAGE_CAPTURE = 2
+const val REQUEST_ADD_POST = 3
+const val REQUEST_PROFILE_IMAGE_CAPTURE = 4

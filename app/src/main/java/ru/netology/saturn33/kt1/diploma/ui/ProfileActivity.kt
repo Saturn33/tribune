@@ -19,13 +19,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import ru.netology.saturn33.kt1.diploma.R
+import ru.netology.saturn33.kt1.diploma.REQUEST_PROFILE_IMAGE_CAPTURE
 import ru.netology.saturn33.kt1.diploma.dto.AttachmentDto
 import ru.netology.saturn33.kt1.diploma.model.UserBadge
 import ru.netology.saturn33.kt1.diploma.repositories.Repository
 import java.io.IOException
 
 class ProfileActivity : AppCompatActivity(), CoroutineScope by MainScope() {
-    private val REQUEST_IMAGE_CAPTURE = 1
     private var attachmentModel: AttachmentDto? = null
     private var job: Job? = null
     private lateinit var dialog: AlertDialog
@@ -156,7 +156,7 @@ class ProfileActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private fun dispatchTakePictureIntent() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             takePictureIntent.resolveActivity(packageManager)?.also {
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                startActivityForResult(takePictureIntent, REQUEST_PROFILE_IMAGE_CAPTURE)
             }
         }
     }
@@ -165,7 +165,7 @@ class ProfileActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK)
             when (requestCode) {
-                REQUEST_IMAGE_CAPTURE -> {
+                REQUEST_PROFILE_IMAGE_CAPTURE -> {
                     val imageBitmap = data?.extras?.get("data") as Bitmap?
                     imageBitmap?.let {
                         launch {
