@@ -88,6 +88,13 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
     }
 
+    override fun onBackPressed() {
+        if (filterByUser > 0)
+            filterByUser(0, "", null)
+        else
+            super.onBackPressed()
+    }
+
     private fun getProfileInfo() {
         profileJob = launch {
             try {
