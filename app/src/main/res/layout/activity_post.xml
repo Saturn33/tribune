@@ -45,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/idea_text"
+            android:maxLength="100"
             android:inputType="textMultiLine" />
     </com.google.android.material.textfield.TextInputLayout>
 
