@@ -70,6 +70,9 @@ class PostViewHolder(val adapter: PostAdapter, itemView: View) : RecyclerView.Vi
                             adapter.notifyItemChanged(currentPosition)
                         }
                     }
+                    else {
+                        Toast.makeText(context, context.getString(R.string.vote_only_once), Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
 
@@ -93,6 +96,9 @@ class PostViewHolder(val adapter: PostAdapter, itemView: View) : RecyclerView.Vi
                             }
                             adapter.notifyItemChanged(currentPosition)
                         }
+                    }
+                    else {
+                        Toast.makeText(context, context.getString(R.string.vote_only_once), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
