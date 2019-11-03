@@ -69,9 +69,12 @@ class PostViewHolder(val adapter: PostAdapter, itemView: View) : RecyclerView.Vi
                             }
                             adapter.notifyItemChanged(currentPosition)
                         }
-                    }
-                    else {
-                        Toast.makeText(context, context.getString(R.string.vote_only_once), Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.vote_only_once),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
@@ -96,9 +99,12 @@ class PostViewHolder(val adapter: PostAdapter, itemView: View) : RecyclerView.Vi
                             }
                             adapter.notifyItemChanged(currentPosition)
                         }
-                    }
-                    else {
-                        Toast.makeText(context, context.getString(R.string.vote_only_once), Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.vote_only_once),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
@@ -137,14 +143,22 @@ class PostViewHolder(val adapter: PostAdapter, itemView: View) : RecyclerView.Vi
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     val currentPosition = adapterPosition
                     val item = adapter.list[currentPosition]
-                    (context as FeedActivity).filterByUser(item.author.id, item.author.username, item.author.avatar?.url)
+                    (context as FeedActivity).filterByUser(
+                        item.author.id,
+                        item.author.username,
+                        item.author.avatar?.url
+                    )
                 }
             }
             username.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     val currentPosition = adapterPosition
                     val item = adapter.list[currentPosition]
-                    (context as FeedActivity).filterByUser(item.author.id, item.author.username, item.author.avatar?.url)
+                    (context as FeedActivity).filterByUser(
+                        item.author.id,
+                        item.author.username,
+                        item.author.avatar?.url
+                    )
                 }
             }
         }
