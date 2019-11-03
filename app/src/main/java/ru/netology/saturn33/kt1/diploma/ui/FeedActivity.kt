@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.google.android.gms.common.ConnectionResult
@@ -38,6 +39,28 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private var filterByUser: Long = 0
     private var menuLink: Menu? = null
     private var loadMore = true
+    private lateinit var scrollListener: RecyclerView.OnScrollListener
+    private val lastVisibleItemPosition: Int
+        get() = (container.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+
+    private fun setRecyclerViewScrollListener(container: RecyclerView) {
+        scrollListener = object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!loadMore) return
+                val totalItemCount = recyclerView.layoutManager?.itemCount ?: 0
+                if (totalItemCount == lastVisibleItemPosition + 1) {
+                    container.removeOnScrollListener(scrollListener)
+                    when (recyclerView.adapter) {
+                        is PostAdapter -> {
+                            getOlderPosts(if ((recyclerView.adapter as PostAdapter).list.isEmpty()) 0 else (recyclerView.adapter as PostAdapter).list.last().id)
+                        }
+                    }
+                }
+            }
+        }
+        container.addOnScrollListener(scrollListener)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,37 +74,14 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         fab.setOnClickListener {
             startActivityForResult(Intent(this, PostActivity::class.java), REQUEST_ADD_POST)
         }
-        getProfileInfo()
 
-        job = launch {
-            dialog.show()
-            try {
-                val result = Repository.getRecentPosts()
-                if (result.isSuccessful) {
-                    with(container) {
-                        layoutManager = LinearLayoutManager(this@FeedActivity)
-                        val list = result.body() ?: mutableListOf<PostResponseDto>()
-                        adapter = PostAdapter(list)
-                    }
-                }
-            } catch (e: IOException) {
-                Toast.makeText(
-                    this@FeedActivity,
-                    getString(R.string.feed_load_error),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            val userId = intent.getLongExtra("userId", 0L)
-            if (userId > 0) {
-                filterByUser(
-                    userId,
-                    intent.getStringExtra("userName") ?: "",
-                    intent.getStringExtra("userAvatar")
-                )
-            }
-            dialog.dismiss()
+        with(container) {
+            layoutManager = LinearLayoutManager(this@FeedActivity)
+            val list = mutableListOf<PostResponseDto>()
+            adapter = PostAdapter(list)
+            setRecyclerViewScrollListener(this)
         }
+        getNewPosts()
 
         swipeContainer.setOnRefreshListener {
             job = getNewPosts()
@@ -179,6 +179,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     internal fun getOlderPosts(postId: Long) {
         if (!loadMore) return
+        loadMore = false
         job = launch {
             loadMoreImg.visibility = View.VISIBLE
             try {
@@ -201,6 +202,9 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                             getString(R.string.no_more_posts),
                             Toast.LENGTH_SHORT
                         ).show()
+                    } else if (newItems.size > 0) {
+                        loadMore = true
+                        setRecyclerViewScrollListener(container)
                     }
 
                 } else {
@@ -249,6 +253,7 @@ class FeedActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 ).show()
             }
             swipeContainer.isRefreshing = false
+            setRecyclerViewScrollListener(container)
             dialog.dismiss()
         }
     }

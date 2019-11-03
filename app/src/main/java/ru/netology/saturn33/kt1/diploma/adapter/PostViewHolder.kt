@@ -101,9 +101,9 @@ class PostViewHolder(val adapter: PostAdapter, itemView: View) : RecyclerView.Vi
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     val currentPosition = adapterPosition
                     val item = adapter.list[currentPosition]
-                    (this.context as Activity).startActivityForResult(
+                    (context as Activity).startActivityForResult(
                         Intent(
-                            this.context,
+                            context,
                             ReactionListActivity::class.java
                         ).apply {
                             putExtra("postId", item.id)
@@ -118,7 +118,7 @@ class PostViewHolder(val adapter: PostAdapter, itemView: View) : RecyclerView.Vi
                     val item = adapter.list[currentPosition]
 
                     item.link?.let { link ->
-                        this.context.startActivity(
+                        context.startActivity(
                             Intent().apply {
                                 action = Intent.ACTION_VIEW
                                 data = Uri.parse(link)
@@ -204,13 +204,6 @@ class PostViewHolder(val adapter: PostAdapter, itemView: View) : RecyclerView.Vi
                 }
             } else {
                 badge.visibility = View.GONE
-            }
-
-            if (adapterPosition != RecyclerView.NO_POSITION) {
-                val currentPosition = adapterPosition
-                if (currentPosition == adapter.list.lastIndex) {
-                    (context as FeedActivity).getOlderPosts(if (adapter.list.isEmpty()) 0 else adapter.list.last().id)
-                }
             }
         }
     }
